@@ -16,12 +16,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Verify Secrets (Debug)
+        run: |
+          echo "GCP_HOST is set: ${{ secrets.GCP_HOST != '' }}"
+          echo "GCP_USERNAME is set: ${{ secrets.GCP_USERNAME != '' }}"
+          echo "GCP_SSH_PRIVATE_KEY is set: ${{ secrets.GCP_SSH_PRIVATE_KEY != '' }}"
+          echo "Key length: ${#GCP_SSH_PRIVATE_KEY}"
+        env:
+          GCP_SSH_PRIVATE_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+
       - name: Deploy to GCP
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          port: 22
+          debug: true
           script: |
             cd /home/user/xperion-wiki
             git pull origin main

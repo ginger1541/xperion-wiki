@@ -1,19 +1,19 @@
 # Xperion Wiki - 개발 진행상황
 
 **최종 업데이트**: 2026-01-08
-**현재 상태**: Phase 1 MVP 개발 완료 (80%)
+**현재 상태**: Phase 2 배포 완료, CI/CD 설정 완료 (95%)
 
 ---
 
 ## 📊 전체 진행률
 
 ```
-전체 진행률: ████████░░ 80%
+전체 진행률: █████████░ 95%
 
-백엔드:      ████████░░ 85%
-프론트엔드:  ████████░░ 85%
-배포:        ██████░░░░ 60%
-문서화:      ████████░░ 80%
+백엔드:      █████████░ 90%
+프론트엔드:  █████████░ 90%
+배포/CI/CD:  █████████░ 95%
+문서화:      █████████░ 90%
 ```
 
 ---
@@ -347,19 +347,35 @@
 - [x] 로컬 개발 환경 설정
 - [x] 통합 테스트
 
-### Phase 2: 배포 및 안정화 (다음 단계)
-1. **GCP 배포**
-   - [ ] GCP Compute Engine e2-micro VM 생성
-   - [ ] 배포 스크립트 실행
-   - [ ] Nginx + SSL 설정
-   - [ ] systemd 서비스 등록
+### Phase 2: 배포 및 안정화 (현재 단계)
+1. **GCP 배포** ✅
+   - [x] GCP Compute Engine e2-micro VM 생성
+   - [x] 배포 스크립트 실행
+   - [x] Nginx + SSL 설정
+   - [x] systemd 서비스 등록
 
-2. **Vercel 배포**
-   - [ ] Vercel 프로젝트 연결
-   - [ ] 환경 변수 설정
-   - [ ] 프로덕션 빌드
+2. **Vercel 배포** ✅
+   - [x] Vercel 프로젝트 연결
+   - [x] 환경 변수 설정
+   - [x] 프로덕션 빌드
+   - [x] SPA 라우팅 설정 (vercel.json)
 
-3. **모니터링**
+3. **CI/CD** ✅ (설정 완료)
+   - [x] GitHub Actions 워크플로우 생성 (.github/workflows/deploy-backend.yml)
+   - [x] 워크플로우 파일 수정 (venv 경로 수정, checkout 단계 추가)
+   - [x] CI/CD 설정 가이드 작성 (docs/CI_CD_SETUP.md)
+   - [ ] SSH 키 설정 (GitHub Secrets에 GCP_HOST, GCP_USERNAME, GCP_SSH_PRIVATE_KEY 추가 필요)
+   - [ ] 첫 자동 배포 테스트
+
+4. **모바일 반응형** ✅
+   - [x] Sidebar 토글 (햄버거 메뉴)
+   - [x] 반응형 헤더
+   - [x] WikiList 반응형
+   - [x] WikiDetail 반응형
+   - [x] Dashboard 반응형
+   - [x] ProjectSelector 반응형
+
+5. **모니터링**
    - [ ] Sentry 에러 추적 설정
    - [ ] 로그 수집 및 분석
    - [ ] 성능 모니터링
@@ -401,6 +417,7 @@
 - [x] README.md (프론트엔드)
 - [x] DEVELOPMENT.md - 개발 문서
 - [x] DEPLOYMENT_GCP.md - GCP 배포 가이드
+- [x] CI_CD_SETUP.md - CI/CD 설정 가이드
 - [x] QUICKSTART.md (백엔드)
 - [x] RUN_NOW.md (백엔드)
 - [x] PROGRESS.md (이 문서)
@@ -479,9 +496,12 @@
 | 로깅 | ✅ 완료 | Structlog |
 | 에러 처리 | ✅ 완료 | 표준화됨 |
 | CORS | ✅ 완료 | 설정 완료 |
+| GCP 배포 | ✅ 완료 | e2-micro VM |
+| Vercel 배포 | ✅ 완료 | 자동 배포 |
+| 모바일 반응형 | ✅ 완료 | 전체 페이지 적용 |
 | 인증 | ❌ 미구현 | 선택사항 |
 | 테스트 | ❌ 미구현 | 추가 필요 |
-| CI/CD | ❌ 미구현 | 추가 필요 |
+| CI/CD | ✅ 완료 | SSH 키만 설정하면 즉시 사용 가능 |
 | 모니터링 | ⚠️ 부분 | Sentry 준비 |
 
 **배포 가능 상태**: ✅ 예 (인증 없이)
@@ -494,6 +514,7 @@
 ### 관련 문서
 - [개발 문서](./DEVELOPMENT.md)
 - [GCP 배포 가이드](./DEPLOYMENT_GCP.md)
+- [CI/CD 설정 가이드](./CI_CD_SETUP.md)
 - [백엔드 README](../backend/README.md)
 - [프론트엔드 README](../frontend/README.md)
 

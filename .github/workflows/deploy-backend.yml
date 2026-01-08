@@ -11,8 +11,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Deploy to GCP
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -21,8 +24,9 @@ jobs:
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
           script: |
             cd /home/user/xperion-wiki
-            sudo git pull origin main
+            git pull origin main
             cd backend
-            sudo /home/user/xperion-wiki/venv/bin/python -m alembic upgrade head
+            source venv/bin/activate
+            python -m alembic upgrade head
             sudo systemctl restart xperion-wiki
-            echo "✅ Deployment completed!"
+            echo "Deployment completed successfully!"

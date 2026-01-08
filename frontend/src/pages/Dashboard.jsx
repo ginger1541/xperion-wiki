@@ -104,34 +104,35 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="space-y-4 lg:space-y-6">
+        <div className="space-y-3 md:space-y-4 lg:space-y-6">
             {/* Recent Documents Section */}
             {recentDocs.length > 0 && (
-                <Card>
-                    <div className="px-4 lg:px-6 py-3 lg:py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
-                        <div className="flex items-center gap-2">
-                            <FiClock className="w-4 h-4 lg:w-5 lg:h-5 text-text-muted" />
-                            <h2 className="text-base lg:text-lg font-bold text-text-main">Recently Updated</h2>
+                <Card className="overflow-hidden">
+                    <div className="px-3 md:px-4 lg:px-6 py-2.5 md:py-3 lg:py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
+                        <div className="flex items-center gap-1.5 md:gap-2">
+                            <FiClock className="w-4 h-4 md:w-5 md:h-5 text-text-muted flex-shrink-0" />
+                            <h2 className="text-sm md:text-base lg:text-lg font-bold text-text-main">Recently Updated</h2>
                         </div>
-                        <span className="bg-white border border-border text-text-muted text-xs px-2 py-1 rounded-full font-medium">
+                        <span className="bg-white border border-border text-text-muted text-xs px-2 py-0.5 md:py-1 rounded-full font-medium flex-shrink-0">
                             {recentDocs.length}
                         </span>
                     </div>
-                    <div className="p-3 lg:p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 lg:gap-4">
+                    {/* Mobile: List view, Desktop: Grid view */}
+                    <div className="divide-y divide-border md:divide-y-0 md:p-3 lg:p-6 md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 md:gap-2 lg:gap-4">
                         {recentDocs.map((doc) => (
                             <div
                                 key={doc.slug}
                                 onClick={() => navigateToDoc(doc.category, doc.slug)}
-                                className="group flex items-center gap-3 p-3 lg:p-4 rounded-lg border border-transparent hover:bg-surfaceHover hover:border-border transition-all cursor-pointer"
+                                className="group flex items-center gap-2.5 md:gap-3 p-3 md:p-3 lg:p-4 md:rounded-lg md:border md:border-transparent hover:bg-surfaceHover md:hover:border-border transition-all cursor-pointer active:bg-surface"
                             >
-                                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
-                                    <FiFileText className="w-5 h-5 lg:w-6 lg:h-6" />
+                                <div className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-md md:rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
+                                    <FiFileText className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <span className="text-sm lg:text-base font-medium text-text-main group-hover:text-primary transition-colors block truncate">
+                                    <span className="text-sm md:text-sm lg:text-base font-medium text-text-main group-hover:text-primary transition-colors block truncate">
                                         {doc.title}
                                     </span>
-                                    <span className="text-xs lg:text-sm text-text-muted">
+                                    <span className="text-xs md:text-xs lg:text-sm text-text-muted">
                                         {formatRelativeTime(doc.updated_at)}
                                     </span>
                                 </div>
@@ -149,27 +150,28 @@ export default function Dashboard() {
                     const label = categoryConfig?.label || category.charAt(0).toUpperCase() + category.slice(1);
 
                     return (
-                        <Card key={category}>
-                            <div className="px-4 lg:px-6 py-3 lg:py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
-                                <div className="flex items-center gap-2">
-                                    <Icon className="w-4 h-4 lg:w-5 lg:h-5 text-text-muted" />
-                                    <h2 className="text-base lg:text-lg font-bold text-text-main">{label}</h2>
+                        <Card key={category} className="overflow-hidden">
+                            <div className="px-3 md:px-4 lg:px-6 py-2.5 md:py-3 lg:py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
+                                <div className="flex items-center gap-1.5 md:gap-2">
+                                    <Icon className="w-4 h-4 md:w-5 md:h-5 text-text-muted flex-shrink-0" />
+                                    <h2 className="text-sm md:text-base lg:text-lg font-bold text-text-main">{label}</h2>
                                 </div>
-                                <span className="bg-white border border-border text-text-muted text-xs px-2 py-1 rounded-full font-medium">
+                                <span className="bg-white border border-border text-text-muted text-xs px-2 py-0.5 md:py-1 rounded-full font-medium flex-shrink-0">
                                     {docs.length}
                                 </span>
                             </div>
-                            <div className="p-3 lg:p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 lg:gap-4">
+                            {/* Mobile: List view, Desktop: Grid view */}
+                            <div className="divide-y divide-border md:divide-y-0 md:p-3 lg:p-6 md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 md:gap-2 lg:gap-4">
                                 {docs.slice(0, 20).map((doc) => (
                                     <div
                                         key={doc.slug}
                                         onClick={() => navigateToDoc(category, doc.slug)}
-                                        className="group flex items-center gap-3 p-3 lg:p-4 rounded-lg border border-transparent hover:bg-surfaceHover hover:border-border transition-all cursor-pointer"
+                                        className="group flex items-center gap-2.5 md:gap-3 p-3 md:p-3 lg:p-4 md:rounded-lg md:border md:border-transparent hover:bg-surfaceHover md:hover:border-border transition-all cursor-pointer active:bg-surface"
                                     >
-                                        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
-                                            <FiFileText className="w-5 h-5 lg:w-6 lg:h-6" />
+                                        <div className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-md md:rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
+                                            <FiFileText className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                                         </div>
-                                        <span className="text-sm lg:text-base font-medium text-text-main group-hover:text-primary transition-colors truncate flex-1 min-w-0">
+                                        <span className="text-sm md:text-sm lg:text-base font-medium text-text-main group-hover:text-primary transition-colors truncate flex-1 min-w-0">
                                             {doc.title}
                                         </span>
                                     </div>

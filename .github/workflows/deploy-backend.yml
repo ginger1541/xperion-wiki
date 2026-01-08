@@ -1,0 +1,28 @@
+name: Deploy Backend to GCP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to GCP
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/user/xperion-wiki
+            sudo git pull origin main
+            cd backend
+            sudo /home/user/xperion-wiki/venv/bin/python -m alembic upgrade head
+            sudo systemctl restart xperion-wiki
+            echo "✅ Deployment completed!"

@@ -2,7 +2,7 @@
 
 D&D TRPG 홈브류 서버를 위한 위키 시스템 백엔드 API
 
-<!-- CI/CD Pipeline Test: 2026-01-08 - SSH keys reconfigured -->
+<!-- CI/CD Pipeline Test: 2026-01-08 - Verifying workflow status -->
 
 ## 기술 스택
 

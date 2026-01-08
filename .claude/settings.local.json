@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(python -m venv:*)",
+      "Bash(test -d \"C:\\\\xperion-wiki\\\\frontend\")",
+      "Bash(test -f \"C:\\\\xperion-wiki\\\\backend\\\\.env\")",
+      "Bash(wc -l \"C:\\\\xperion-wiki\\\\frontend\\\\src\"/**/*.{jsx,js})",
+      "Bash(test -d \"C:\\\\xperion-wiki\\\\frontend\\\\node_modules\")",
+      "Bash(docker ps:*)",
+      "Bash(source:*)",
+      "Bash(uvicorn:*)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(python -m pip:*)",
+      "Bash(python -c:*)",
+      "Bash(sc query:*)",
+      "Bash(tasklist:*)",
+      "Bash(where:*)",
+      "Bash(choco install:*)",
+      "Bash(\"/c/Program Files/PostgreSQL/16/bin/psql.exe\" --version)",
+      "Bash(\"/c/Program Files/PostgreSQL/15/bin/psql.exe\" --version)",
+      "Bash(\"/c/Program Files/PostgreSQL/14/bin/psql.exe\" --version)",
+      "Bash(export PGPASSWORD=postgres123)",
+      "Bash(\"/c/Program Files/PostgreSQL/16/bin/psql.exe\" -U postgres -c \"CREATE DATABASE xperion_wiki;\")",
+      "Bash(\"/c/Program Files/PostgreSQL/16/bin/psql.exe\" -U postgres -c \"CREATE USER admin WITH PASSWORD ''password'';\")",
+      "Bash(\"/c/Program Files/PostgreSQL/16/bin/psql.exe\" -U postgres -c \"GRANT ALL PRIVILEGES ON DATABASE xperion_wiki TO admin;\")",
+      "Bash(\"/c/Program Files/PostgreSQL/16/bin/psql.exe\" -U postgres -d xperion_wiki -c \"GRANT ALL ON SCHEMA public TO admin;\")",
+      "Bash(python -m alembic:*)",
+      "Bash(curl:*)",
+      "Bash(npm run dev:*)",
+      "Bash(python scripts/seed_data.py:*)",
+      "Bash(python:*)",
+      "Bash(test:*)",
+      "Bash(gcloud:*)",
+      "Bash(git remote:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git branch:*)"
+    ]
+  }
+}

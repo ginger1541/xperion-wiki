@@ -104,20 +104,20 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 lg:space-y-6">
             {/* Recent Documents Section */}
             {recentDocs.length > 0 && (
                 <Card>
-                    <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
+                    <div className="px-4 lg:px-6 py-3 lg:py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
                         <div className="flex items-center gap-2">
-                            <FiClock className="w-5 h-5 text-text-muted" />
-                            <h2 className="text-lg font-bold text-text-main">Recently Updated</h2>
+                            <FiClock className="w-4 h-4 lg:w-5 lg:h-5 text-text-muted" />
+                            <h2 className="text-base lg:text-lg font-bold text-text-main">Recently Updated</h2>
                         </div>
                         <span className="bg-white border border-border text-text-muted text-xs px-2 py-1 rounded-full font-medium">
                             {recentDocs.length}
                         </span>
                     </div>
-                    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="p-3 lg:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
                         {recentDocs.map((doc) => (
                             <div
                                 key={doc.slug}
@@ -150,16 +150,16 @@ export default function Dashboard() {
 
                     return (
                         <Card key={category}>
-                            <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
+                            <div className="px-4 lg:px-6 py-3 lg:py-4 border-b border-border flex items-center justify-between bg-sidebar/50">
                                 <div className="flex items-center gap-2">
-                                    <Icon className="w-5 h-5 text-text-muted" />
-                                    <h2 className="text-lg font-bold text-text-main">{label}</h2>
+                                    <Icon className="w-4 h-4 lg:w-5 lg:h-5 text-text-muted" />
+                                    <h2 className="text-base lg:text-lg font-bold text-text-main">{label}</h2>
                                 </div>
                                 <span className="bg-white border border-border text-text-muted text-xs px-2 py-1 rounded-full font-medium">
                                     {docs.length}
                                 </span>
                             </div>
-                            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="p-3 lg:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
                                 {docs.slice(0, 20).map((doc) => (
                                     <div
                                         key={doc.slug}
@@ -189,7 +189,7 @@ export default function Dashboard() {
                     );
                 })
             ) : (
-                <Card className="p-12 text-center">
+                <Card className="p-8 lg:p-12 text-center">
                     <FiFileText className="w-16 h-16 text-text-muted mx-auto mb-4" />
                     <h3 className="text-xl font-semibold mb-2">No documents yet</h3>
                     <p className="text-text-muted mb-4">

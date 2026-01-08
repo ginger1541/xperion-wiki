@@ -35,7 +35,20 @@
       "Bash(git remote:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(openssl rand:*)",
+      "Bash([ -f \"backend/.env\" ])",
+      "Bash(cat:*)",
+      "Bash(gh --version:*)",
+      "Bash(python3:*)",
+      "Bash(vercel --version:*)",
+      "Bash(npm install:*)",
+      "Bash(vercel login)",
+      "Bash(vercel --yes --env:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel --prod)"
     ]
   }
 }

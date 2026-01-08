@@ -172,11 +172,11 @@ export default function WikiDetail() {
     }
 
     return (
-        <div className="max-w-5xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
+        <div className="max-w-5xl mx-auto min-h-[calc(100vh-8rem)] flex flex-col">
             {/* Toolbar */}
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 lg:mb-6 pb-4 border-b border-border">
+                <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+                    <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
                         <FiCornerUpLeft className="w-5 h-5" />
                     </Button>
                     {isEditing ? (
@@ -184,16 +184,16 @@ export default function WikiDetail() {
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className="text-3xl font-bold bg-transparent border-none outline-none placeholder:text-text-muted/50"
+                            className="text-xl sm:text-2xl lg:text-3xl font-bold bg-transparent border-none outline-none placeholder:text-text-muted/50 min-w-0 flex-1"
                             placeholder="Document Title"
                             disabled={saving}
                         />
                     ) : (
-                        <h1 className="text-3xl font-bold">{title}</h1>
+                        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold truncate">{title}</h1>
                     )}
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0">
                     {isEditing ? (
                         <>
                             <Button
@@ -213,7 +213,8 @@ export default function WikiDetail() {
                                     </>
                                 ) : (
                                     <>
-                                        <FiSave className="mr-2" /> Save Changes
+                                        <FiSave className="sm:mr-2" />
+                                        <span className="hidden sm:inline">Save Changes</span>
                                     </>
                                 )}
                             </Button>
@@ -233,7 +234,8 @@ export default function WikiDetail() {
                                 onClick={() => setIsEditing(true)}
                                 disabled={saving}
                             >
-                                <FiEdit2 className="mr-2" /> Edit
+                                <FiEdit2 className="sm:mr-2" />
+                                <span className="hidden sm:inline">Edit</span>
                             </Button>
                         </>
                     )}

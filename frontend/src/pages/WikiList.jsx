@@ -60,7 +60,7 @@ export default function WikiList() {
         ? docs.filter(doc =>
             doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             doc.slug.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+        )
         : docs;
 
     const categoryTitle = category ? category.charAt(0).toUpperCase() + category.slice(1) : 'All Documents';
@@ -108,26 +108,27 @@ export default function WikiList() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 lg:space-y-6">
             {/* Action Bar */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight">{categoryTitle}</h2>
+                    <h2 className="text-xl lg:text-2xl font-bold tracking-tight">{categoryTitle}</h2>
                     <p className="text-text-muted text-sm mt-1">{filteredDocs.length} Documents found</p>
                 </div>
-                <div className="flex gap-3">
-                    <div className="relative">
+                <div className="flex gap-2 sm:gap-3">
+                    <div className="relative flex-1 sm:flex-none">
                         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                         <input
                             type="text"
                             placeholder="Filter..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-9 pr-4 py-2 border border-border rounded-md text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                            className="w-full sm:w-40 lg:w-auto pl-9 pr-4 py-2 border border-border rounded-md text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                         />
                     </div>
-                    <Button onClick={() => navigate('new')}>
-                        <FiPlus className="mr-2" /> New Document
+                    <Button onClick={() => navigate('new')} className="whitespace-nowrap">
+                        <FiPlus className="sm:mr-2" />
+                        <span className="hidden sm:inline">New Document</span>
                     </Button>
                 </div>
             </div>

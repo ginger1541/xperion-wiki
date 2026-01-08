@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
-import { FiSearch, FiPlus } from 'react-icons/fi';
+import { FiSearch, FiPlus, FiMenu } from 'react-icons/fi';
 import { Button } from '../ui/Button';
 
 // Mock Project Data (In real app, fetch from API based on ID)
@@ -14,6 +14,7 @@ const PROJECT_MAP = {
 export const AppLayout = () => {
     const { projectId } = useParams();
     const location = useLocation();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const projectTitle = PROJECT_MAP[projectId] || "Unknown Project";
 
@@ -30,21 +31,29 @@ export const AppLayout = () => {
 
     return (
         <div className="min-h-screen bg-background text-text-main font-sans">
-            <Sidebar />
-            <main className="pl-[240px] min-h-screen flex flex-col transition-all">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <main className="lg:pl-[240px] min-h-screen flex flex-col transition-all">
                 {/* Header */}
-                <header className="h-16 border-b border-border flex items-center justify-between px-8 bg-background sticky top-0 z-10 w-full">
-                    <div>
+                <header className="h-14 lg:h-16 border-b border-border flex items-center justify-between px-4 lg:px-8 bg-background sticky top-0 z-10 w-full">
+                    <div className="flex items-center gap-3">
+                        {/* Mobile menu button */}
+                        <button
+                            onClick={() => setSidebarOpen(true)}
+                            className="lg:hidden p-2 -ml-2 text-text-muted hover:text-text-main"
+                        >
+                            <FiMenu className="w-5 h-5" />
+                        </button>
+
                         <div className="flex items-baseline gap-2">
-                            <h1 className="text-xl font-bold">{projectTitle}</h1>
-                            <span className="text-text-muted">/</span>
-                            <span className="text-sm font-medium text-text-main">{getPageTitle()}</span>
+                            <h1 className="text-lg lg:text-xl font-bold truncate max-w-[150px] sm:max-w-none">{projectTitle}</h1>
+                            <span className="text-text-muted hidden sm:inline">/</span>
+                            <span className="text-sm font-medium text-text-main hidden sm:inline">{getPageTitle()}</span>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        {/* Search Bar */}
-                        <div className="relative w-64 md:w-80 group">
+                    <div className="flex items-center gap-2 lg:gap-4">
+                        {/* Search Bar - hidden on mobile, visible on larger screens */}
+                        <div className="relative hidden md:block w-64 lg:w-80 group">
                             <input
                                 type="text"
                                 placeholder="검색어를 입력하세요..."
@@ -53,15 +62,21 @@ export const AppLayout = () => {
                             <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-primary transition-colors" />
                         </div>
 
+                        {/* Mobile search icon */}
+                        <button className="md:hidden p-2 text-text-muted hover:text-text-main">
+                            <FiSearch className="w-5 h-5" />
+                        </button>
+
                         {/* New Button */}
                         <Button size="sm" className="rounded-full shadow-none">
-                            <FiPlus className="mr-1.5" /> New
+                            <FiPlus className="lg:mr-1.5" />
+                            <span className="hidden lg:inline">New</span>
                         </Button>
                     </div>
                 </header>
 
                 {/* Content Area */}
-                <div className="flex-1 p-8 max-w-7xl w-full mx-auto animate-fade-in">
+                <div className="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto animate-fade-in">
                     <Outlet />
                 </div>
             </main>

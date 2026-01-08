@@ -251,7 +251,7 @@ export default function WikiDetail() {
                         disabled={saving}
                     />
                 ) : (
-                    <div className="bg-white rounded-lg border border-border p-8 min-h-full shadow-sm overflow-y-auto">
+                    <div className="bg-white rounded-lg border border-border p-4 sm:p-6 lg:p-8 min-h-full shadow-sm overflow-y-auto">
                         <MarkdownViewer content={content} />
                     </div>
                 )}

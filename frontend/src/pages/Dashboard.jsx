@@ -117,21 +117,21 @@ export default function Dashboard() {
                             {recentDocs.length}
                         </span>
                     </div>
-                    <div className="p-3 lg:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
+                    <div className="p-3 lg:p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 lg:gap-4">
                         {recentDocs.map((doc) => (
                             <div
                                 key={doc.slug}
                                 onClick={() => navigateToDoc(doc.category, doc.slug)}
-                                className="group flex items-center gap-3 p-3 rounded-lg border border-transparent hover:bg-surfaceHover hover:border-border transition-all cursor-pointer"
+                                className="group flex items-center gap-3 p-3 lg:p-4 rounded-lg border border-transparent hover:bg-surfaceHover hover:border-border transition-all cursor-pointer"
                             >
-                                <div className="w-8 h-8 rounded bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors">
-                                    <FiFileText className="w-4 h-4" />
+                                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
+                                    <FiFileText className="w-5 h-5 lg:w-6 lg:h-6" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <span className="text-sm font-medium text-text-main group-hover:text-primary transition-colors block truncate">
+                                    <span className="text-sm lg:text-base font-medium text-text-main group-hover:text-primary transition-colors block truncate">
                                         {doc.title}
                                     </span>
-                                    <span className="text-xs text-text-muted">
+                                    <span className="text-xs lg:text-sm text-text-muted">
                                         {formatRelativeTime(doc.updated_at)}
                                     </span>
                                 </div>
@@ -159,17 +159,17 @@ export default function Dashboard() {
                                     {docs.length}
                                 </span>
                             </div>
-                            <div className="p-3 lg:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
+                            <div className="p-3 lg:p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 lg:gap-4">
                                 {docs.slice(0, 20).map((doc) => (
                                     <div
                                         key={doc.slug}
                                         onClick={() => navigateToDoc(category, doc.slug)}
-                                        className="group flex items-center gap-3 p-3 rounded-lg border border-transparent hover:bg-surfaceHover hover:border-border transition-all cursor-pointer"
+                                        className="group flex items-center gap-3 p-3 lg:p-4 rounded-lg border border-transparent hover:bg-surfaceHover hover:border-border transition-all cursor-pointer"
                                     >
-                                        <div className="w-8 h-8 rounded bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors">
-                                            <FiFileText className="w-4 h-4" />
+                                        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
+                                            <FiFileText className="w-5 h-5 lg:w-6 lg:h-6" />
                                         </div>
-                                        <span className="text-sm font-medium text-text-main group-hover:text-primary transition-colors truncate">
+                                        <span className="text-sm lg:text-base font-medium text-text-main group-hover:text-primary transition-colors truncate flex-1 min-w-0">
                                             {doc.title}
                                         </span>
                                     </div>

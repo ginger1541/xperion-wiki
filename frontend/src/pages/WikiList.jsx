@@ -150,22 +150,22 @@ export default function WikiList() {
             )}
 
             {/* Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4">
                 {filteredDocs.map((doc) => (
                     <Card
                         key={doc.slug}
-                        className="group cursor-pointer hover:border-primary/50 transition-all p-4"
+                        className="group cursor-pointer hover:border-primary/50 transition-all p-4 lg:p-5"
                         onClick={() => navigate(doc.slug)}
                     >
-                        <div className="flex items-start justify-between mb-3">
-                            <div className="w-10 h-10 rounded-lg bg-surfaceHover flex items-center justify-center text-text-muted group-hover:text-primary group-hover:bg-primary/5 transition-colors">
-                                <FiFileText className="w-5 h-5" />
+                        <div className="flex items-start justify-between mb-3 lg:mb-4">
+                            <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-lg bg-surfaceHover flex items-center justify-center text-text-muted group-hover:text-primary group-hover:bg-primary/5 transition-colors">
+                                <FiFileText className="w-6 h-6 lg:w-7 lg:h-7" />
                             </div>
-                            <span className="text-xs text-text-muted bg-surfaceHover px-2 py-1 rounded-full">{CategoryLabel(doc.category)}</span>
+                            <span className="text-xs lg:text-sm text-text-muted bg-surfaceHover px-2 py-1 rounded-full">{CategoryLabel(doc.category)}</span>
                         </div>
 
-                        <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">{doc.title}</h3>
-                        <p className="text-xs text-text-muted">
+                        <h3 className="font-bold text-base lg:text-lg mb-1 group-hover:text-primary transition-colors line-clamp-2">{doc.title}</h3>
+                        <p className="text-xs lg:text-sm text-text-muted">
                             Last edited {formatRelativeTime(doc.updated_at)} by {doc.author}
                         </p>
                     </Card>

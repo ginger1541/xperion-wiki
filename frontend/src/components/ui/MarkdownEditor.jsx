@@ -2,7 +2,7 @@ import React from 'react';
 import { MarkdownViewer } from './MarkdownViewer';
 import { cn } from '../../lib/utils';
 
-export const MarkdownEditor = ({ content, onChange, className }) => {
+export const MarkdownEditor = ({ content, onChange, className, disabled = false }) => {
     return (
         <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-6 h-full", className)}>
             {/* Editor Pane */}
@@ -14,9 +14,10 @@ export const MarkdownEditor = ({ content, onChange, className }) => {
                 <textarea
                     value={content}
                     onChange={(e) => onChange(e.target.value)}
-                    className="flex-1 w-full p-4 resize-none outline-none font-mono text-sm leading-relaxed bg-transparent text-text-main"
+                    className="flex-1 w-full p-4 resize-none outline-none font-mono text-sm leading-relaxed bg-transparent text-text-main disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="# 제목을 입력하세요..."
                     spellCheck="false"
+                    disabled={disabled}
                 />
             </div>
 

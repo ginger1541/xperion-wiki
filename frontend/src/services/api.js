@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // API Base URL from environment variable
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Development: http://localhost:8000/api
+// Production: /api (Vercel will proxy to backend via rewrite)
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? 'http://localhost:8000/api' : '/api');
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -53,7 +56,7 @@ apiClient.interceptors.response.use(
  * Get all projects
  */
 export const getProjects = async () => {
-  const response = await apiClient.get('/api/projects');
+  const response = await apiClient.get('/projects');
   return response.data;
 };
 
@@ -62,7 +65,7 @@ export const getProjects = async () => {
  * @param {string} projectId - Project ID
  */
 export const getProject = async (projectId) => {
-  const response = await apiClient.get(`/api/projects/${projectId}`);
+  const response = await apiClient.get(`/projects/${projectId}`);
   return response.data;
 };
 
@@ -71,7 +74,7 @@ export const getProject = async (projectId) => {
  * @param {Object} data - Project data
  */
 export const createProject = async (data) => {
-  const response = await apiClient.post('/api/projects', data);
+  const response = await apiClient.post('/projects', data);
   return response.data;
 };
 
@@ -81,7 +84,7 @@ export const createProject = async (data) => {
  * @param {Object} data - Updated project data
  */
 export const updateProject = async (projectId, data) => {
-  const response = await apiClient.put(`/api/projects/${projectId}`, data);
+  const response = await apiClient.put(`/projects/${projectId}`, data);
   return response.data;
 };
 
@@ -90,7 +93,7 @@ export const updateProject = async (projectId, data) => {
  * @param {string} projectId - Project ID
  */
 export const deleteProject = async (projectId) => {
-  const response = await apiClient.delete(`/api/projects/${projectId}`);
+  const response = await apiClient.delete(`/projects/${projectId}`);
   return response.data;
 };
 
@@ -110,7 +113,7 @@ export const deleteProject = async (projectId) => {
  * @param {number} params.limit - Items per page
  */
 export const getPages = async (params = {}) => {
-  const response = await apiClient.get('/api/pages', { params });
+  const response = await apiClient.get('/pages', { params });
   return response.data;
 };
 
@@ -119,7 +122,7 @@ export const getPages = async (params = {}) => {
  * @param {string} slug - Page slug
  */
 export const getPage = async (slug) => {
-  const response = await apiClient.get(`/api/pages/${slug}`);
+  const response = await apiClient.get(`/pages/${slug}`);
   return response.data;
 };
 
@@ -136,7 +139,7 @@ export const getPage = async (slug) => {
  * @param {string[]} data.tags - Page tags
  */
 export const createPage = async (data) => {
-  const response = await apiClient.post('/api/pages', data);
+  const response = await apiClient.post('/pages', data);
   return response.data;
 };
 
@@ -153,7 +156,7 @@ export const createPage = async (data) => {
  * @param {boolean} data.force - Force update even if conflict
  */
 export const updatePage = async (slug, data) => {
-  const response = await apiClient.put(`/api/pages/${slug}`, data);
+  const response = await apiClient.put(`/pages/${slug}`, data);
   return response.data;
 };
 
@@ -163,7 +166,7 @@ export const updatePage = async (slug, data) => {
  * @param {boolean} hard - Hard delete (remove from GitHub) vs soft delete
  */
 export const deletePage = async (slug, hard = false) => {
-  const response = await apiClient.delete(`/api/pages/${slug}`, {
+  const response = await apiClient.delete(`/pages/${slug}`, {
     params: { hard },
   });
   return response.data;
@@ -181,7 +184,7 @@ export const deletePage = async (slug, hard = false) => {
  * @param {number} params.limit - Result limit (max 100)
  */
 export const searchPages = async (params) => {
-  const response = await apiClient.get('/api/search', { params });
+  const response = await apiClient.get('/search', { params });
   return response.data;
 };
 
@@ -193,7 +196,7 @@ export const searchPages = async (params) => {
  * Get all tags
  */
 export const getTags = async () => {
-  const response = await apiClient.get('/api/tags');
+  const response = await apiClient.get('/tags');
   return response.data;
 };
 
@@ -203,7 +206,7 @@ export const getTags = async () => {
  * @param {Object} params - Query parameters
  */
 export const getPagesByTag = async (tagName, params = {}) => {
-  const response = await apiClient.get(`/api/tags/${tagName}/pages`, { params });
+  const response = await apiClient.get(`/tags/${tagName}/pages`, { params });
   return response.data;
 };
 
@@ -219,7 +222,7 @@ export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await apiClient.post('/api/upload/image', formData, {
+  const response = await apiClient.post('/upload/image', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

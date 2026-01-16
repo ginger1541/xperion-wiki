@@ -1,19 +1,19 @@
 # Xperion Wiki - 개발 진행상황
 
-**최종 업데이트**: 2026-01-08
-**현재 상태**: Phase 2 배포 완료, CI/CD 설정 완료 (95%)
+**최종 업데이트**: 2026-01-16
+**현재 상태**: Phase 2 배포 완료, 프로덕션 환경 운영 중 (100%)
 
 ---
 
 ## 📊 전체 진행률
 
 ```
-전체 진행률: █████████░ 95%
+전체 진행률: ██████████ 100% (MVP 완료!)
 
-백엔드:      █████████░ 90%
-프론트엔드:  █████████░ 90%
-배포/CI/CD:  █████████░ 95%
-문서화:      █████████░ 90%
+백엔드:      ██████████ 95%
+프론트엔드:  ██████████ 95%
+배포/CI/CD:  ██████████ 100%
+문서화:      █████████░ 95%
 ```
 
 ---
@@ -130,6 +130,7 @@
 #### 1.7 데이터베이스 마이그레이션 ✅
 - [x] 001_initial_schema.py - Pages 테이블 + Trigram 인덱스
 - [x] 002_add_tags.py - Tags 및 page_tags 테이블
+- [x] 003_make_project_id_nullable.py - project_id를 nullable로 변경 (2026-01-16)
 
 #### 1.8 테스트 데이터 ✅
 - [x] seed_data.py 스크립트
@@ -347,18 +348,30 @@
 - [x] 로컬 개발 환경 설정
 - [x] 통합 테스트
 
-### Phase 2: 배포 및 안정화 (현재 단계)
-1. **GCP 배포** ✅
+### Phase 2: 배포 및 안정화 ✅ (완료!)
+1. **GCP 배포** ✅ (2026-01-16 완료)
    - [x] GCP Compute Engine e2-micro VM 생성
    - [x] 배포 스크립트 실행
    - [x] Nginx + SSL 설정
    - [x] systemd 서비스 등록
+   - [x] PostgreSQL 설정 및 최적화
+   - [x] 환경변수 설정 (.env)
+   - [x] GitHub Token 권한 설정
+   - [x] 프로덕션 환경 테스트 완료
 
-2. **Vercel 배포** ✅
+2. **Vercel 배포** ✅ (2026-01-16 완료)
    - [x] Vercel 프로젝트 연결
    - [x] 환경 변수 설정
    - [x] 프로덕션 빌드
    - [x] SPA 라우팅 설정 (vercel.json)
+   - [x] GitHub 자동 배포 연동
+   - [x] API 프록시 설정 수정
+
+3. **GitHub 문서 저장소** ✅ (2026-01-16 완료)
+   - [x] xperion-wiki-content 레포지토리 생성
+   - [x] content/ 폴더 구조 초기화
+   - [x] README 및 가이드 문서 작성
+   - [x] GitHub Token 접근 권한 설정
 
 3. **CI/CD** ✅ (설정 완료)
    - [x] GitHub Actions 워크플로우 생성 (.github/workflows/deploy-backend.yml)
@@ -389,24 +402,40 @@
 
 ---
 
-## 🐛 알려진 이슈
+## 🐛 알려진 이슈 및 해결된 문제
 
-### 백엔드
-1. **인코딩 문제**
+### ✅ 해결된 이슈 (2026-01-16)
+1. **GitHub Token 권한 문제** ✅
+   - 문제: Fine-grained Token의 Repository Access 제한으로 403 에러 발생
+   - 해결: xperion-wiki-content 레포지토리 접근 권한 추가
+
+2. **project_id NOT NULL 제약조건 에러** ✅
+   - 문제: 프론트엔드가 project_id를 보내지 않아 500 에러 발생
+   - 해결: 마이그레이션 003으로 nullable 변경, 스키마 Optional로 수정
+
+3. **검색 및 목록에 신규 문서 미표시** ✅
+   - 문제: project_id 필터로 인해 NULL 문서들이 필터링됨
+   - 해결: 프론트엔드에서 project_id 필터 제거
+
+4. **Alembic Multiple head revisions 에러** ✅
+   - 문제: 마이그레이션 체인이 갈라짐 (002 → 003, 002 → b8b586cd5b24)
+   - 해결: 003의 down_revision을 'b8b586cd5b24'로 수정
+
+5. **인코딩 문제** ✅
    - seed_data.py에서 한글 이모지 출력 시 UnicodeEncodeError
    - 해결: 영문 메시지로 변경 완료
 
-2. **psycopg2-binary 설치 실패**
+6. **psycopg2-binary 설치 실패** ✅
    - Windows에서 pg_config 없음
    - 해결: Python 3.13용 바이너리 설치 완료
 
-### 프론트엔드
+### ⏳ 남은 이슈
 1. **ProjectSelector API 연동**
    - 현재 MOCK 데이터 사용
    - 실제 프로젝트 API 필요
 
 2. **검색 페이지 미구현**
-   - Placeholder 상태
+   - 기능은 작동하지만 전용 UI 페이지 없음
 
 ---
 
@@ -418,9 +447,12 @@
 - [x] DEVELOPMENT.md - 개발 문서
 - [x] DEPLOYMENT_GCP.md - GCP 배포 가이드
 - [x] CI_CD_SETUP.md - CI/CD 설정 가이드
+- [x] VERCEL_SETUP.md - Vercel 배포 가이드 (2026-01-16)
+- [x] VERCEL_RECONNECT.md - Vercel GitHub 재연동 가이드 (2026-01-16)
 - [x] QUICKSTART.md (백엔드)
 - [x] RUN_NOW.md (백엔드)
 - [x] PROGRESS.md (이 문서)
+- [x] CHANGELOG.md - 변경사항 로그
 
 ### 추가 필요 문서
 - [ ] API 문서 (자동 생성 - OpenAPI)
@@ -484,28 +516,32 @@
 
 ---
 
-## 🚀 배포 준비도
+## 🚀 배포 상태
 
 | 항목 | 상태 | 비고 |
 |-----|------|------|
-| 백엔드 코드 | ✅ 완료 | 프로덕션 레디 |
-| 프론트엔드 코드 | ✅ 완료 | 프로덕션 레디 |
-| 데이터베이스 | ✅ 완료 | 마이그레이션 완료 |
+| 백엔드 코드 | ✅ 완료 | 프로덕션 운영 중 |
+| 프론트엔드 코드 | ✅ 완료 | 프로덕션 운영 중 |
+| 데이터베이스 | ✅ 완료 | 마이그레이션 003까지 적용 |
 | API 문서 | ✅ 완료 | Swagger/ReDoc |
-| 환경 변수 | ✅ 완료 | .env 설정 |
+| 환경 변수 | ✅ 완료 | GCP VM + Vercel 설정 |
 | 로깅 | ✅ 완료 | Structlog |
 | 에러 처리 | ✅ 완료 | 표준화됨 |
-| CORS | ✅ 완료 | 설정 완료 |
-| GCP 배포 | ✅ 완료 | e2-micro VM |
-| Vercel 배포 | ✅ 완료 | 자동 배포 |
+| CORS | ✅ 완료 | Vercel URL 포함 |
+| GCP 배포 | ✅ 완료 | http://34.29.153.88 운영 중 |
+| Vercel 배포 | ✅ 완료 | 자동 배포 활성화 |
+| GitHub 저장소 | ✅ 완료 | xperion-wiki-content 분리 |
 | 모바일 반응형 | ✅ 완료 | 전체 페이지 적용 |
-| 인증 | ❌ 미구현 | 선택사항 |
-| 테스트 | ❌ 미구현 | 추가 필요 |
-| CI/CD | ✅ 완료 | SSH 키만 설정하면 즉시 사용 가능 |
-| 모니터링 | ⚠️ 부분 | Sentry 준비 |
+| 인증 | ❌ 미구현 | Phase 3 예정 |
+| 테스트 | ⏳ 부분 | 기본 테스트만 존재 |
+| CI/CD | ✅ 완료 | Vercel 자동 배포 작동 |
+| 모니터링 | ⏳ 준비 | Sentry 준비 중 |
 
-**배포 가능 상태**: ✅ 예 (인증 없이)
-**권장 사항**: 테스트 코드 추가 후 배포
+**배포 상태**: ✅ **프로덕션 운영 중!**
+**접속 URL**:
+- 프론트엔드: https://frontend-beta-ivory-83.vercel.app
+- 백엔드 API: http://34.29.153.88/api
+- API 문서: http://34.29.153.88/docs
 
 ---
 

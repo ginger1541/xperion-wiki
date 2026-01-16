@@ -10,12 +10,85 @@
 ## [Unreleased]
 
 ### 추가 예정
-- GCP Compute Engine 배포
-- Vercel 배포
 - 검색 페이지 UI
 - 설정 페이지 UI
-- 테스트 코드
-- CI/CD 파이프라인
+- 테스트 코드 확장
+- 인증/권한 시스템
+- 모니터링 및 로깅 개선
+
+---
+
+## [0.2.0] - 2026-01-16
+
+### 추가됨 (Added)
+
+#### 배포
+- ✅ GCP Compute Engine 배포 완료 (e2-micro)
+- ✅ Vercel 프론트엔드 배포 완료
+- ✅ 프로덕션 환경 설정 완료
+- ✅ GitHub 문서 저장소 분리 (xperion-wiki-content)
+
+#### 데이터베이스
+- Alembic 마이그레이션 003 추가 (`make_project_id_nullable`)
+- `project_id` 컬럼을 nullable로 변경하여 유연성 향상
+
+### 변경됨 (Changed)
+
+#### 백엔드
+- `PageBase` 스키마에서 `project_id`를 Optional로 변경
+  - 프론트엔드가 `project_id` 없이도 문서 생성 가능
+  - 더 유연한 문서 관리 구조
+
+#### 프론트엔드
+- WikiList: `project_id` 필터 제거하여 모든 문서 표시
+- Dashboard: `project_id` 필터 제거하여 모든 문서 표시
+- 검색 기능 개선: project_id 관계없이 전체 검색 가능
+
+### 수정됨 (Fixed)
+
+#### 배포 및 인프라
+- **GitHub Token 권한 문제 해결**
+  - Fine-grained Token의 Repository Access 설정 수정
+  - `xperion-wiki-content` 레포지토리 접근 권한 추가
+  - 403 Forbidden 에러 해결
+
+- **문서 저장소 초기화**
+  - `xperion-wiki-content` 레포지토리 생성 및 초기화
+  - `content/` 폴더 구조 생성
+  - README 및 가이드 문서 추가
+
+- **데이터베이스 스키마 문제 해결**
+  - `project_id` NOT NULL 제약조건으로 인한 500 에러 수정
+  - 마이그레이션 체인 수정 (Multiple head revisions 에러 해결)
+  - 003 마이그레이션의 `down_revision`을 '002'에서 'b8b586cd5b24'로 수정
+
+- **검색 및 목록 표시 문제 해결**
+  - `project_id=NULL`인 문서들이 필터링되어 보이지 않던 문제 수정
+  - 프론트엔드에서 project_id 필터 제거
+  - 모든 문서가 검색 결과 및 목록에 표시되도록 개선
+
+#### API
+- Vercel API 프록시 설정 수정 (중복 /api/ 경로 제거)
+- MarkdownEditor disabled prop 버그 수정 (TDD 구현)
+
+### 보안 (Security)
+- 프로덕션 환경에서 GitHub Token 안전하게 설정
+- GCP VM 환경변수 분리 및 보안 강화
+- CORS 설정에 Vercel 배포 URL 추가
+
+### 인프라 (Infrastructure)
+- GCP VM 설정 및 최적화
+  - PostgreSQL 설정
+  - systemd 서비스 등록
+  - 환경변수 관리
+- Vercel 자동 배포 파이프라인 구축
+- GitHub과 배포 서버 간 연동 완료
+
+### 문서화 (Documentation)
+- VERCEL_SETUP.md - Vercel 배포 가이드
+- VERCEL_RECONNECT.md - Vercel GitHub 재연동 가이드
+- CI_CD_SETUP.md - CI/CD 설정 가이드
+- 트러블슈팅 문서 업데이트
 
 ---
 

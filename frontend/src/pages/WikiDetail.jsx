@@ -49,7 +49,9 @@ export default function WikiDetail() {
             setLoading(true);
             setError(null);
 
-            const data = await getPage(docSlug);
+            // ✅ FIX: Combine category and docSlug for full slug path
+            const fullSlug = category ? `${category}/${docSlug}` : docSlug;
+            const data = await getPage(fullSlug);
             setPageData(data);
             setTitle(data.title);
             setContent(data.content);
@@ -91,7 +93,9 @@ export default function WikiDetail() {
                 navigate(`../${newPage.slug}`, { replace: true });
             } else {
                 // Update existing document
-                const updatedPage = await updatePage(docSlug, {
+                // ✅ FIX: Use full slug path
+                const fullSlug = category ? `${category}/${docSlug}` : docSlug;
+                const updatedPage = await updatePage(fullSlug, {
                     title: title.trim(),
                     content,
                     status: pageData.status,
@@ -122,7 +126,9 @@ export default function WikiDetail() {
 
         try {
             setSaving(true);
-            await deletePage(docSlug, false); // Soft delete
+            // ✅ FIX: Use full slug path
+            const fullSlug = category ? `${category}/${docSlug}` : docSlug;
+            await deletePage(fullSlug, false); // Soft delete
             navigate(-1);
         } catch (err) {
             console.error('Failed to delete document:', err);

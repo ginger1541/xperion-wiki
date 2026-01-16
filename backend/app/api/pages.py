@@ -60,9 +60,12 @@ async def sync_tags(db: AsyncSession, page: Page, tag_names: list[str]):
 
         tags.append(tag)
 
-    # 기존 태그의 usage_count 감소
-    for old_tag in page.tags:
-        old_tag.usage_count = max(0, old_tag.usage_count - 1)
+    # 기존 태그의 usage_count 감소 (새 페이지가 아닌 경우만)
+    if page.id:  # 페이지가 이미 DB에 존재하는 경우
+        # 먼저 기존 태그들을 명시적으로 로드
+        await db.refresh(page, ["tags"])
+        for old_tag in page.tags:
+            old_tag.usage_count = max(0, old_tag.usage_count - 1)
 
     # 새 태그들의 usage_count 증가
     for tag in tags:
@@ -139,7 +142,7 @@ async def get_pages(
     )
 
 
-@router.get("/{slug}", response_model=PageDetail)
+@router.get("/{slug:path}", response_model=PageDetail)
 async def get_page(
     slug: str,
     db: AsyncSession = Depends(get_db)
@@ -167,13 +170,55 @@ async def get_page(
     # 조회수 증가
     page.view_count += 1
     await db.commit()
+    await db.refresh(page, ["tags"])  # 커밋 후 페이지 객체 새로고침
 
     # 관련 문서 추천 (같은 태그를 가진 문서들)
     related_pages = await _get_related_pages(db, page)
 
-    # PageDetail 변환
-    page_detail = PageDetail.model_validate(page)
-    page_detail.related_pages = [PageResponse.model_validate(p) for p in related_pages]
+    # PageDetail 변환 - tags를 수동으로 변환
+    page_dict = {
+        "id": page.id,
+        "slug": page.slug,
+        "title": page.title,
+        "category": page.category,
+        "author": page.author,
+        "project_id": page.project_id,
+        "content": page.content,
+        "summary": page.summary,
+        "status": page.status,
+        "tags": [tag.name for tag in page.tags],
+        "created_at": page.created_at,
+        "updated_at": page.updated_at,
+        "view_count": page.view_count,
+        "github_sha": page.github_sha,
+        "content_html": page.content_html,
+        "github_url": page.github_url,
+        "last_synced_at": page.last_synced_at,
+    }
+    page_detail = PageDetail.model_validate(page_dict)
+
+    # 관련 문서들도 tags를 수동으로 변환
+    related_pages_list = []
+    for p in related_pages:
+        related_dict = {
+            "id": p.id,
+            "slug": p.slug,
+            "title": p.title,
+            "category": p.category,
+            "author": p.author,
+            "project_id": p.project_id,
+            "content": p.content,
+            "summary": p.summary,
+            "status": p.status,
+            "tags": [tag.name for tag in p.tags],
+            "created_at": p.created_at,
+            "updated_at": p.updated_at,
+            "view_count": p.view_count,
+            "github_sha": p.github_sha,
+        }
+        related_pages_list.append(PageResponse.model_validate(related_dict))
+
+    page_detail.related_pages = related_pages_list
 
     return page_detail
 
@@ -222,8 +267,10 @@ async def _get_related_pages(db: AsyncSession, current_page: Page, limit: int = 
     if not rows:
         return []
 
+    from sqlalchemy.orm import selectinload
+
     page_ids = [row.id for row in rows]
-    pages_query = select(Page).where(Page.id.in_(page_ids))
+    pages_query = select(Page).options(selectinload(Page.tags)).where(Page.id.in_(page_ids))
     pages_result = await db.execute(pages_query)
     pages_dict = {p.id: p for p in pages_result.scalars().all()}
 
@@ -283,6 +330,7 @@ async def create_page(
             title=page_data.title,
             category=page_data.category,
             author=page_data.author,
+            project_id=page_data.project_id,  # project_id 추가
             content=page_data.content,
             summary=page_data.summary,
             status=page_data.status,
@@ -299,11 +347,28 @@ async def create_page(
             await sync_tags(db, new_page, page_data.tags)
 
         await db.commit()
-        await db.refresh(new_page)
+        await db.refresh(new_page, ["tags"])  # 명시적으로 tags 관계 로드
 
         logger.info("page_created", slug=slug, id=new_page.id, tags=page_data.tags)
 
-        return PageResponse.model_validate(new_page)
+        # Tag 객체를 문자열로 변환
+        page_dict = {
+            "id": new_page.id,
+            "slug": new_page.slug,
+            "title": new_page.title,
+            "category": new_page.category,
+            "author": new_page.author,
+            "project_id": new_page.project_id,
+            "content": new_page.content,
+            "summary": new_page.summary,
+            "status": new_page.status,
+            "tags": [tag.name for tag in new_page.tags],
+            "created_at": new_page.created_at,
+            "updated_at": new_page.updated_at,
+            "view_count": new_page.view_count,
+            "github_sha": new_page.github_sha,
+        }
+        return PageResponse.model_validate(page_dict)
 
     except GithubException as e:
         logger.error("github_error", slug=slug, status=e.status, error=str(e))
@@ -327,7 +392,7 @@ async def create_page(
         )
 
 
-@router.put("/{slug}", response_model=PageResponse)
+@router.put("/{slug:path}", response_model=PageResponse)
 async def update_page(
     slug: str,
     page_data: PageUpdate,
@@ -425,11 +490,28 @@ async def update_page(
             await sync_tags(db, existing_page, page_data.tags)
 
         await db.commit()
-        await db.refresh(existing_page)
+        await db.refresh(existing_page, ["tags"])  # 명시적으로 tags 관계 로드
 
         logger.info("page_updated", slug=slug, tags=page_data.tags)
 
-        return PageResponse.model_validate(existing_page)
+        # Tag 객체를 문자열로 변환
+        page_dict = {
+            "id": existing_page.id,
+            "slug": existing_page.slug,
+            "title": existing_page.title,
+            "category": existing_page.category,
+            "author": existing_page.author,
+            "project_id": existing_page.project_id,
+            "content": existing_page.content,
+            "summary": existing_page.summary,
+            "status": existing_page.status,
+            "tags": [tag.name for tag in existing_page.tags],
+            "created_at": existing_page.created_at,
+            "updated_at": existing_page.updated_at,
+            "view_count": existing_page.view_count,
+            "github_sha": existing_page.github_sha,
+        }
+        return PageResponse.model_validate(page_dict)
 
     except GithubException as e:
         if e.status == 409:
@@ -455,7 +537,7 @@ async def update_page(
         raise
 
 
-@router.delete("/{slug}", status_code=200)
+@router.delete("/{slug:path}", status_code=200)
 async def delete_page(
     slug: str,
     soft: bool = Query(True, description="소프트 삭제 (archived로 이동)"),

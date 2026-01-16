@@ -20,7 +20,7 @@ class Page(Base):
     author = Column(String(100))
 
     # 프로젝트(세계관) 외래키
-    project_id = Column(String(50), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
+    project_id = Column(String(50), ForeignKey("projects.id", ondelete="CASCADE"), nullable=True, index=True)
 
     # 컨텐츠 캐싱 (GitHub 마크다운 원본)
     content = Column(Text, nullable=False)

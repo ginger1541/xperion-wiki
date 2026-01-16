@@ -41,9 +41,9 @@ export default function Dashboard() {
             setLoading(true);
             setError(null);
 
-            // Fetch all active documents sorted by updated date
+            // Fetch all active documents sorted by updated date (no project_id filter)
             const allDocs = await getPages({
-                project_id: projectId,
+                // project_id: projectId,  // Removed to show documents without project_id
                 status: 'active',
                 sort: 'updated_at',
                 order: 'desc',

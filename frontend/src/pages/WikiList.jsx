@@ -36,9 +36,9 @@ export default function WikiList() {
             setLoading(true);
             setError(null);
 
-            // Fetch pages with project and category filter
+            // Fetch pages with category filter (no project_id filter to show all documents)
             const result = await getPages({
-                project_id: projectId,
+                // project_id: projectId,  // Removed to show documents without project_id
                 category: category ? `${category}` : undefined,
                 status: 'active',
                 sort: 'updated_at',

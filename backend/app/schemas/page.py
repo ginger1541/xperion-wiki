@@ -14,7 +14,7 @@ class PageBase(BaseModel):
     summary: Optional[str] = None
     author: Optional[str] = Field(None, max_length=100)
     status: str = Field("active", pattern="^(active|archived|draft)$")
-    project_id: str = Field(..., max_length=50, description="프로젝트(세계관) ID")
+    project_id: Optional[str] = Field(None, max_length=50, description="프로젝트(세계관) ID")
 
 
 class PageCreate(PageBase):

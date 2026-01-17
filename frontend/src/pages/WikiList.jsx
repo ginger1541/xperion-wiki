@@ -155,7 +155,7 @@ export default function WikiList() {
                     <Card
                         key={doc.slug}
                         className="group cursor-pointer hover:border-primary/50 transition-all p-4 lg:p-5"
-                        onClick={() => navigate(doc.slug)}
+                        onClick={() => navigate(`/project/${projectId}/wiki/${doc.slug}`)}
                     >
                         <div className="flex items-start justify-between mb-3 lg:mb-4">
                             <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-lg bg-surfaceHover flex items-center justify-center text-text-muted group-hover:text-primary group-hover:bg-primary/5 transition-colors">

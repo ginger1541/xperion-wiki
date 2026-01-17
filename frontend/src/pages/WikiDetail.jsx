@@ -89,8 +89,8 @@ export default function WikiDetail() {
                 });
 
                 setIsEditing(false);
-                // Navigate to the newly created document
-                navigate(`../${newPage.slug}`, { replace: true });
+                // Navigate to the newly created document (absolute path)
+                navigate(`/project/${projectId}/wiki/${newPage.slug}`, { replace: true });
             } else {
                 // Update existing document
                 // ✅ FIX: Use full slug path

@@ -36,8 +36,8 @@ jobs:
           script: |
             cd /home/user/xperion-wiki
             git pull origin main
-            cd backend
             source venv/bin/activate
+            cd backend
             python -m alembic upgrade head
             sudo systemctl restart xperion-wiki
             echo "Deployment completed successfully!"

@@ -3,7 +3,7 @@ Pages API - 위키 문서 CRUD
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, text
 from typing import Optional
 from datetime import datetime
 from github import GithubException
@@ -153,7 +153,7 @@ async def get_page(
     - **slug**: 문서 식별자 (예: characters/player/elon)
     """
 
-    # 문서 조회 (tags를 함께 로드)
+    # 문서 조회
     from sqlalchemy.orm import selectinload
     query = select(Page).options(selectinload(Page.tags)).where(Page.slug == slug)
     result = await db.execute(query)
@@ -168,10 +168,13 @@ async def get_page(
             }
         )
 
-    # 조회수 증가
-    page.view_count += 1
+    # 조회수 증가 (별도 쿼리로 처리하여 tags relationship 유지)
+    await db.execute(
+        text("UPDATE pages SET view_count = view_count + 1 WHERE id = :id"),
+        {"id": page.id}
+    )
     await db.commit()
-    await db.refresh(page)  # 커밋 후 페이지 객체 새로고침
+    page.view_count += 1  # 로컬 객체도 업데이트
 
     # 관련 문서 추천 (같은 태그를 가진 문서들)
     related_pages = await _get_related_pages(db, page)

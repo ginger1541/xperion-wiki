@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
-import { Outlet, useParams, useLocation } from 'react-router-dom';
-import { FiSearch, FiPlus, FiMenu } from 'react-icons/fi';
+import { Outlet, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { FiSearch, FiPlus, FiMenu, FiUser, FiMapPin, FiBook } from 'react-icons/fi';
 import { Button } from '../ui/Button';
 
 // Mock Project Data (In real app, fetch from API based on ID)
@@ -11,11 +11,37 @@ const PROJECT_MAP = {
     citron: "시트론 성의 개척자들"
 };
 
+// Categories for new document
+const CATEGORIES = [
+    { key: 'characters', label: 'Character', icon: FiUser },
+    { key: 'locations', label: 'Location', icon: FiMapPin },
+    { key: 'lore', label: 'Lore', icon: FiBook },
+];
+
 export const AppLayout = () => {
     const { projectId } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [newMenuOpen, setNewMenuOpen] = useState(false);
+    const newMenuRef = useRef(null);
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (newMenuRef.current && !newMenuRef.current.contains(event.target)) {
+                setNewMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleNewDocument = (category) => {
+        navigate(`/project/${projectId}/wiki/${category}/new`);
+        setNewMenuOpen(false);
+    };
 
     const projectTitle = PROJECT_MAP[projectId] || "Unknown Project";
 
@@ -75,11 +101,39 @@ export const AppLayout = () => {
                                 <FiSearch className="w-5 h-5" />
                             </button>
 
-                            {/* New Button */}
-                            <Button size="sm" className="rounded-full shadow-none text-xs md:text-sm px-2.5 md:px-3 lg:px-4">
-                                <FiPlus className="w-4 h-4 lg:mr-1.5" />
-                                <span className="hidden lg:inline">New</span>
-                            </Button>
+                            {/* New Button with Dropdown */}
+                            <div className="relative" ref={newMenuRef}>
+                                <Button
+                                    size="sm"
+                                    className="rounded-full shadow-none text-xs md:text-sm px-2.5 md:px-3 lg:px-4"
+                                    onClick={() => setNewMenuOpen(!newMenuOpen)}
+                                >
+                                    <FiPlus className="w-4 h-4 lg:mr-1.5" />
+                                    <span className="hidden lg:inline">New</span>
+                                </Button>
+
+                                {/* Dropdown Menu */}
+                                {newMenuOpen && (
+                                    <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-border py-1 z-50">
+                                        <div className="px-3 py-2 text-xs font-semibold text-text-muted border-b border-border">
+                                            New Document
+                                        </div>
+                                        {CATEGORIES.map((cat) => {
+                                            const Icon = cat.icon;
+                                            return (
+                                                <button
+                                                    key={cat.key}
+                                                    onClick={() => handleNewDocument(cat.key)}
+                                                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-text-main hover:bg-surfaceHover transition-colors"
+                                                >
+                                                    <Icon className="w-4 h-4 text-text-muted" />
+                                                    {cat.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 

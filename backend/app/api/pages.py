@@ -153,8 +153,9 @@ async def get_page(
     - **slug**: 문서 식별자 (예: characters/player/elon)
     """
 
-    # 문서 조회
-    query = select(Page).where(Page.slug == slug)
+    # 문서 조회 (tags를 함께 로드)
+    from sqlalchemy.orm import selectinload
+    query = select(Page).options(selectinload(Page.tags)).where(Page.slug == slug)
     result = await db.execute(query)
     page = result.scalar_one_or_none()
 
@@ -170,7 +171,7 @@ async def get_page(
     # 조회수 증가
     page.view_count += 1
     await db.commit()
-    await db.refresh(page, ["tags"])  # 커밋 후 페이지 객체 새로고침
+    await db.refresh(page)  # 커밋 후 페이지 객체 새로고침
 
     # 관련 문서 추천 (같은 태그를 가진 문서들)
     related_pages = await _get_related_pages(db, page)

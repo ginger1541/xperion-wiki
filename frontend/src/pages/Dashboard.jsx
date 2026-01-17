@@ -70,8 +70,8 @@ export default function Dashboard() {
         }
     };
 
-    const navigateToDoc = (category, slug) => {
-        navigate(`/project/1/wiki/${category}/${slug}`);
+    const navigateToDoc = (slug) => {
+        navigate(`/project/${projectId}/wiki/${slug}`);
     };
 
     // Loading state
@@ -122,7 +122,7 @@ export default function Dashboard() {
                         {recentDocs.map((doc) => (
                             <div
                                 key={doc.slug}
-                                onClick={() => navigateToDoc(doc.category, doc.slug)}
+                                onClick={() => navigateToDoc(doc.slug)}
                                 className="group flex items-center gap-2.5 md:gap-3 p-3 md:p-3 lg:p-4 md:rounded-lg md:border md:border-transparent hover:bg-surfaceHover md:hover:border-border transition-all cursor-pointer active:bg-surface"
                             >
                                 <div className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-md md:rounded-lg bg-surface border border-border flex items-center justify-center text-text-light group-hover:text-primary group-hover:border-primary/30 transition-colors flex-shrink-0">
@@ -178,7 +178,7 @@ export default function Dashboard() {
                                 ))}
                                 {docs.length > 20 && (
                                     <div
-                                        onClick={() => navigate(`/project/1/wiki/${category}`)}
+                                        onClick={() => navigate(`/project/${projectId}/wiki/${category}`)}
                                         className="group flex items-center gap-3 p-3 rounded-lg border border-dashed border-border hover:bg-surfaceHover transition-all cursor-pointer"
                                     >
                                         <span className="text-sm font-medium text-text-muted group-hover:text-primary transition-colors">
